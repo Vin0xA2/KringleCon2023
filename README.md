@@ -3,45 +3,71 @@ Try them out yourself at: https://www.sans.org/mlp/holiday-hack-challenge-2023/
 
 Below are my notes and solutions for the 2023 SANS Holiday Hack Challenge (KringleCon). This is incomplete as I am still working on all of the challenges. The ones that stood out so far are the KQL Kraken Hunt and Certificate SSHenanigans challenges. The former I used KQL to query various logs to follow an attacker's movement in a breached environment. The latter I exploited vulnerabillities in a web application to gain privileged access. In both challenges, I see how attackers can gain access to an environment and move to their ultimate goal. I will upload more notes as I continue to solve these challenges.
 
-## About Artificial Intelligence
+<hr>
+
+### About Artificial Intelligence
 [AI Providers](Notes/SynthesisTrueEnding.txt)
 
-## Snowball Fight
+<hr>
+
+### Snowball Fight
 [Snowball Fight](Notes/SnowballFight.txt)
 ([Instructions](ReferenceMaterials/SnowballFightInstructions.jpg) | [Victory!](ReferenceMaterials/SnowballFightVictory.jpg))
 
-## Linux 101
+<hr>
+
+### Linux 101
 [Linux 101](Notes/Linux101.txt)
 
-## Reportinator
+<hr>
+
+### Reportinator
 [Reportinator](Notes/Reportinator.txt)
 ([The Report](ReferenceMaterials/Reportinator.docx) | [JS Code](ReferenceMaterials/ReportinatorJS.txt) | [Success Message](ReferenceMaterials/ReportinatorSuccess.docx))
 
-## Azure 101
+<hr>
+
+### Azure 101
 [Azure 101](Notes/Azure101.txt)
 
-## Luggage Lock
+<hr>
+
+### Luggage Lock
 [Luggage Lock](Notes/LuggageLock.txt) ([Initial Screen](ReferenceMaterials/LuggageLock.jpg))
 
-## Linux Privilege Escalation
+<hr>
+
+### Linux Privilege Escalation
 [Linux PrivEsc](Notes/LinuxPrivEsc.txt)
 
-## Faster Lock Combination
+<hr>
+
+### Faster Lock Combination
 [Faster Lock Combination](Notes/FasterLockCombination.txt) ([Initial Screen](ReferenceMaterials/FasterLockCombination.jpg))
 
-## Game Cartridges V1
+<hr>
+
+### Game Cartridges V1
 [Game Cartridges V1](Notes/GameCartridgesV1.txt) ([The QR Code](ReferenceMaterials/GameCartridgesV1QR.jpg))
 
-## Game Cartridges V2
+<hr>
+
+### Game Cartridges V2
 (In progress)
 
-## Game Cartridges V3
+<hr>
+
+### Game Cartridges V3
 (In progress)
 
-## Na-an
+<hr>
+
+### Na-an
 [Na-an](Notes/Naan.txt) ([Instructions](ReferenceMaterials/Naan.jpg))
 
-## KQL Kraken Hunt
+<hr>
+
+### KQL Kraken Hunt
 [Onboarding](Notes/KQLKrakenHuntOnboarding.txt)
 
 [Case 1](Notes/KQLKrakenHuntCase1.txt)
@@ -56,23 +82,37 @@ Below are my notes and solutions for the 2023 SANS Holiday Hack Challenge (Kring
 
 [Case 6](Notes/KQLKrakenHuntCase6.txt)
 
-## Phish Detection Agency
+<hr>
+
+### Phish Detection Agency
 [Phish Detection Agency](Notes/PhishDetectionAgency.txt) ([Initial Screen](ReferenceMaterials/PhishDetection.jpg))
 
-## Hashcat
+<hr>
+
+### Hashcat
 [Hashcat](Notes/Hashcat.txt)
 
-## Elf Hunt
+<hr>
+
+### Elf Hunt
 [Elf Hunt](Notes/ElfHunt.txt)
 
-## Certificate SSHenanigans
+<hr>
+
+### Certificate SSHenanigans
 [Certificate SSHenanigans](Notes/CertificateSSHenanigans.txt) ([Demo Notes](ReferenceMaterials/SSHenanigansDemoNotes.txt))
 
-## Captain Comms
+<hr>
+
+### Captain Comms
 (In progress)
 
-## Space Island Door Access Speaker
+<hr>
+
+### Space Island Door Access Speaker
 (In progress)
 
-## BONUS! Fishing Guide
+<hr>
+
+### BONUS! Fishing Guide
 (In progress)
