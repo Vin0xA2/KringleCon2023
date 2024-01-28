@@ -1,0 +1,59 @@
+/* 
+This code snippet is for the chrome dev Console (tab). It
+loops a value from '000000000' to '111111111' and then uses
+each digit as the individual input values in the body of a
+HTTP post request.
+
+The fetch function is copied from the Network (tab) when we
+click the Submit Review button in the challenge.
+
+The "referrer" in the fetch function is ***redacted***
+because it changes from person to person.
+
+The "body" is then updated to exploit the challenge. After
+running through the full loop, go to the Network (tab) again
+and sort by the Status column. Find the check entry with
+status of 200 to see what inputs lead to a successful
+submission.
+*/
+
+
+var start = 0;
+var stop = 512;
+var valSubmitted = "";
+
+for (var i = start; i < stop; i++){
+
+//convert to binary and pad to 9 characters with 0's
+valSubmitted = i.toString(2).padStart(9,0);
+
+fetch("https://hhc23-reportinator-dot-holidayhack2023.ue.r.appspot.com/check", {
+  "headers": {
+    "accept": "*/*",
+    "accept-language": "en-US,en;q=0.9",
+    "content-type": "application/x-www-form-urlencoded",
+    "sec-ch-ua": "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin"
+  },
+  "referrer": ***redacted***,
+  "referrerPolicy": "strict-origin-when-cross-origin",
+  "body":
+	"input-1="+valSubmitted.charAt(0)+
+	"&input-2="+valSubmitted.charAt(1)+
+	"&input-3="+valSubmitted.charAt(2)+
+	"&input-4="+valSubmitted.charAt(3)+
+	"&input-5="+valSubmitted.charAt(4)+
+	"&input-6="+valSubmitted.charAt(5)+
+	"&input-7="+valSubmitted.charAt(6)+
+	"&input-8="+valSubmitted.charAt(7)+
+	"&input-9="+valSubmitted.charAt(8),
+  "method": "POST",
+  "mode": "cors",
+  "credentials": "include"
+});
+
+}
