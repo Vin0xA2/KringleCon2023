@@ -1,0 +1,115 @@
+https://detective.kusto.io/sans2023 (or in-game terminal on Film Noir Island: Chiaroscuro City, go to the northwest most part of the island to find the Gumshoe Alley PI Office)
+Objective: Use Azure Data Explorer to uncover misdeeds.
+Hints:
+  Need to find something that happened via a process? => ProcessEvents table
+  Click the blue Train me for the case button to get familiar with KQL.
+  Looking for files was created on a victim system? => FileCreationEvents table
+
+
+Create a free at cluster at (https://dataexplorer.azure.com/freecluster). From "My cluster", go to Cluster details and copy the Cluster URI. Use the URI to log into kusto. Follow the "Onboarding" message to run the script to create the data tables in your free cluster and start the training.
+
+
+Start a new tab under "Query" to get data from the newly created table. There is tab completion when typing the query yourself. Example:
+
+  Employees
+  | take 10
+
+
+Employees is the table to get the data from. The pipe | indicates a start of a new query. The "take" operator explores rows in a table to understand the data structure better.
+
+
+When entering multiple queries, separate each query with an empty line. Make sure to put your cursor on the query you want to run when clicking Run.
+
+  Email
+  | take 10 
+  
+  Employees
+  | take 10 
+  
+  OutboundNetworkEvents
+  | take 10
+
+
+The "count" operator returns the number of rows in a table; there are 200.
+
+  Employees
+  | count
+
+
+The "summarize" operator does the number crunching. Ex: add numbers, find averages, or count things. The following queries the Email table and limits results to recipients being santa_claus@santaworkshopgeeseislands.org. It then displays a count for each recipient+link combination.
+
+  Email
+  | where recipient == 'santa_claus@santaworkshopgeeseislands.org' 
+  | summarize count() by recipient, link
+
+
+The "where" operator filters the data like the above example. Use with == for exact match. Use with =~ for exact but case-insensitive match. Use with "has" for partial and case-insensitive match.
+
+  Employees 
+  | where name has "santa"
+
+
+==========
+Practice 1: Which employee has IP address: '10.10.0.19'?
+
+  Employees
+  | where ip_addr == "10.10.0.19"
+  | summarize count() by name
+
+Answer: Candy Cane Sugarplum
+
+
+==========
+Practice 2: How many emails did Santa Claus receive?
+
+  Email
+  | where recipient =~ 'santa_claus@santaworkshopgeeseislands.org'
+  | count
+
+Answer: 19
+
+
+==========
+Use the "distinct" operator to find unique values.
+
+  Email 
+  | where sender has "SantaWorkshopGeeseIslands.org" 
+  | distinct sender
+
+
+Use "summarize dcount()" to get the count of unique values.
+
+  Email 
+  | where sender has "SantaWorkshopGeeseIslands.org" 
+  | summarize dcount(sender)
+
+
+==========
+Practice 3: Find the ip address of Rudolph Wreathington.
+
+  Employees 
+  | where name == "Rudolph Wreathington"
+
+ip_addr = 10.10.0.75
+How many unique websites did Rudolph Rednose visit? (with OutboundNetworkEvents table)
+
+  OutboundNetworkEvents 
+  | where src_ip == "10.10.0.75" 
+  | summarize dcount(url)
+
+Answer: 59
+
+
+==========
+Final Question: How many Craftperson Elf's are working from laptops?
+
+  Employees
+  | where role == "Craftsperson Elf"
+  | where hostname has "laptop"
+  | summarize dcount(name)
+
+Answer: 25
+
+
+==========
+Continue onto KQLKrakenHuntCase1.txt

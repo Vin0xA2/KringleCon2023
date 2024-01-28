@@ -1,0 +1,23 @@
+In-game Terminal (Christmas Island: Rudolph's rest, northwest of the dock and east of the christmas tree.)
+Objective: Noel Boetie used ChatNPT to write a pentest report. Go to Christmas Island and help him clean it up.
+Hint: AI sometimes can get specifics wrong unless the prompts are well written. Maybe chatNPT made some mistakes.
+
+
+Initial load displays a pentest report with 9 findings. Toggle the green check mark to red x at the end of each finding to mark it as legitimate or AI hallucination. And finally click the Submit Review button at the very bottom to check if you got them right or wrong.
+
+(See Reportinator.docx)
+
+
+I couldn't get it right from reading through the report. So I used the chrome dev console to try all possible combinations.
+
+(Right Click > Inspect > Click the Submit Review button > get an entry in the Network (tab))
+
+
+The "check" entry shows that it is a post request with the submissions for each finding as inputs 1 through 9 in the body of the post request. Wrong combination of submissions results in HTTP response status code of 400.
+
+(See ReportinatorJS.txt for the details of the exploit.)
+
+
+The right combination of submissions returns a HTTP response stauts code of 200. The hallucinations are findings 3, 6, and 9. Submit those in the initial load-up screen to get a validation complete message and complete the challenge.
+
+(See ReportinatorSuccess.docx)

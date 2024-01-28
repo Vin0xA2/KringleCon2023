@@ -1,0 +1,50 @@
+Start with KQLKrakenHuntOnboarding.txt if you haven't.
+
+
+"Case 6" message:
+
+Wow! You decoded those secret messages with easy! You're a rockstar. It seems like we're getting near the end of this investigation, but we need your help with one more thing...
+
+We know that the attackers stole Santa's naughty or nice list. What else happened? Can you find the final malicious command the attacker ran?
+
+
+==========
+What is the name of the executable the attackers used in the final malicious command?
+
+  Query from case 4:
+    ProcessEvents
+    | where timestamp >= datetime("2023-12-02T10:14:21Z")
+    | where hostname == "Y1US-DESKTOP"
+  Filter the process_commandline to contain "powershell"
+  2023-12-25T10:44:27Z has the final command
+  Copy and paste the command into CyberChef.
+  Recipe: From Base64
+  => ...C:\Windows\System32\downwithsanta.exe --wipeall \\\\NorthPolefileshare\\c$
+
+Answer: downwithsanta.exe
+
+
+==========
+What was the command line flag used alongside this executable?
+
+  Continue from above.
+
+Answer: --wipeall
+
+
+==========
+"Well done" message:
+
+Congratulations, you've cracked the Kusto detective agency section of the Holiday Hack Challenge!
+
+By now, you've likely pieced together the broader narrative of the alert we received. It all started with Wombley Cube, a skilled Craftsperson, and a malicious insider, who sent an email to the esteemed head elf, Alabaster Snowball. This seemingly innocent email contained a dangerous link leading to the malicious domain, MadElvesNorthPole.org. Alabaster Snowball, from his PC, unwittingly clicked on the link, resulting in the download and execution of malicious payloads. Notably, you've also discerned Wombley Cube's ulterior motive: to pilfer a copy of Santa's naughty or nice list and erase the data on the share drive containing critical information to Santa's operations. Kudos to you!
+
+To earn credit for your fantastic work, return to the Holiday Hack Challenge and enter the secret phrase which is the result of running this query:
+
+  print base64_decode_tostring('QmV3YXJlIHRoZSBDdWJlIHRoYXQgV29tYmxlcw==')
+
+
+==========
+Either run the query in KQL or copy and paste the base64 string into CyberChef and use "From Base64" recipe. Both will get to the same string.
+
+Decoded string: Beware the Cube that Wombles

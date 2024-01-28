@@ -1,0 +1,12 @@
+In-game terminal (on Island of Misfit Toys: Squarewheel Yard, southwest of the dock in a field of flower)
+Objective: Find the correct position for all four dials on the luggage to unlock it.
+Hint: https://www.youtube.com/watch?v=ycM1hBSEyog
+
+
+(See LuggageLock.jpg for initial message at startup)
+(Select just 1 wheel as practice.)
+Click the number other than the center number rotates the dial in that direction. The keyhole is on a button like metal. Push it then and then keep rotating the dial until you get the message for Dial resistance... Click the keyhole button again to unlock.
+
+
+(Do the 4 wheels.)
+It is just trial and error as for how many clicks on the keyhole button to press and then rotating the wheels. The keyhole button has a depths ranging from 0 (initial position) to 5. Depth 5 locks all the wheels. Press it again after that resets it to 0. Start with depth 4 and the right most dial. The number giving more resistance than usually is probably the correct number. Once all 4 wheels are correct, press the keyhole button again to unlock the luggage and complete the challenge.

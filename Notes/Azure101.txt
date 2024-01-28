@@ -1,0 +1,114 @@
+In-game terminal (at the southwest corner of Christmas Island: Rudolph's Rest)
+Objective: Follow prompts and walk through Azure commands.
+Hint: https://learn.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest
+
+
+==========
+You may not know this but the Azure cli help messages are very easy to access. First, try typing: az help | less
+~$ az help | less
+
+
+==========
+Next, you've already been configured with credentials. Use 'az' and your 'account' to 'show' your current details and make sure to pipe to less ( | less )
+~$ az account show | less
+  {
+    "environmentName": "AzureCloud",
+    "id": "2b0942f3-9bca-484b-a508-abdae2db5e64",
+    "isDefault": true,
+    "name": "northpole-sub",
+    "state": "Enabled",
+    "tenantId": "90a38eda-4006-4dd5-924c-6ca55cacc14d",
+    "user": {
+      "name": "northpole@northpole.invalid",
+      "type": "user"
+    }
+  }
+
+
+==========
+Excellent! Now get a list of resource groups in Azure.
+For more information:
+https://learn.microsoft.com/en-us/cli/azure/group?view=azure-cli-latest
+~$ az group list
+  [
+    {
+      "id": "/subscriptions/2b0942f3-9bca-484b-a508-abdae2db5e64/resourceGroups/northpole-rg1",
+      "location": "eastus",
+      "managedBy": null,
+      "name": "northpole-rg1",
+      "properties": {
+        "provisioningState": "Succeeded"
+      },
+      "tags": {}
+    },
+    {
+      "id": "/subscriptions/2b0942f3-9bca-484b-a508-abdae2db5e64/resourceGroups/northpole-rg2",
+      "location": "westus",
+      "managedBy": null,
+      "name": "northpole-rg2",
+      "properties": {
+        "provisioningState": "Succeeded"
+      },
+      "tags": {}
+    }
+  ]
+
+
+==========
+Ok, now use one of the resource groups to get a list of function apps. For more information:
+https://learn.microsoft.com/en-us/cli/azure/functionapp?view=azure-cli-latest
+Note: Some of the information returned from this command relates to other cloud assets used by Santa and his elves.
+~$ az functionapp list --resource-group northpole-rg1
+  [
+    {
+      "appServicePlanId": "/subscriptions/2b0942f3-9bca-484b-a508-abdae2db5e64/resourceGroups/northpole-rg1/providers/Microsoft.Web/serverfarms/EastUSLinuxDynamicPlan",
+      "availabilityState": "Normal",
+      "clientAffinityEnabled": false,
+      ...
+
+
+==========
+Find a way to list the only VM in one of the resource groups you have access to.
+For more information:
+https://learn.microsoft.com/en-us/cli/azure/vm?view=azure-cli-latest
+~$ az vm list --resource-group northpole-rg2
+  [
+    {
+      "id": "/subscriptions/2b0942f3-9bca-484b-a508-abdae2db5e64/resourceGroups/northpole-rg2/pro
+viders/Microsoft.Compute/virtualMachines/NP-VM1",
+      "location": "eastus",
+      "name": "NP-VM1",
+      ...
+
+
+==========
+Find a way to invoke a run-command against the only Virtual Machine (VM) so you can RunShellScript and get a directory listing to reveal a file on the Azure VM.
+For more information:
+https://learn.microsoft.com/en-us/cli/azure/vm/run-command?view=azure-cli-latest#az-vm-run-command-invoke
+~$ az vm run-command invoke -g northpole-rg2 -n NP-VM1 --command-id RunShellScript --scripts "ls -al"
+  {
+    "value": [
+      {
+        "code": "ComponentStatus/StdOut/succeeded",
+        "displayStatus": "Provisioning succeeded",
+        "level": "Info",
+        "message": "total 52\ndrwxr-x--- 1 0 0 4096 Dec  4 20:38 .\ndrwxr-x--- 1 0 0 4096 Dec  4 20:38 ..\ndrwxr-x--- 1 0 0 4096 Dec  4 20:37 bin\ndrwxr-xr-x 1 0 0 4096 Dec  4 20:38 etc\ndrwxr-x--- 1 0 0 4096 Dec  2 22:16 home\n-rwxr-x--- 1 0 0    0 Dec  4 20:37 jinglebells\ndrwxr-xr-x 1 0 0 4096 Dec  4 20:37 lib\ndrwxr-xr-x 1 0 0 4096 Dec  4 20:37 lib64\ndrwxr-xr-x 1 0 0 4096 Dec  4 20:37 usr\n",
+        ...
+
+
+==========
+Great, you did it all!
+
+
+==========
+(Just for fun, replacing \n with actual new lines returns the following.)
+total 52
+drwxr-x--- 1 0 0 4096 Dec  4 20:38 .
+drwxr-x--- 1 0 0 4096 Dec  4 20:38 ..
+drwxr-x--- 1 0 0 4096 Dec  4 20:37 bin
+drwxr-xr-x 1 0 0 4096 Dec  4 20:38 etc
+drwxr-x--- 1 0 0 4096 Dec  2 22:16 home
+-rwxr-x--- 1 0 0    0 Dec  4 20:37 jinglebells
+drwxr-xr-x 1 0 0 4096 Dec  4 20:37 lib
+drwxr-xr-x 1 0 0 4096 Dec  4 20:37 lib64
+drwxr-xr-x 1 0 0 4096 Dec  4 20:37 usr

@@ -1,0 +1,32 @@
+Start with KQLKrakenHuntOnboarding.txt if you haven't.
+
+
+"Case 3" message:
+
+The victim is Alabaster Snowball? Oh no... that's not good at all! Can you try to find what else the attackers might have done after they sent Alabaster the phishing email?
+
+Use our various security log datasources to uncover more details about what happened to Alabaster.
+
+
+==========
+What time did Alabaster click on the malicious link? Make sure to copy the exact timestamp from the logs!
+
+  OutboundNetworkEvents
+  | where url has "madelvesnorthpole.org/published/search/MonthlyInvoiceForReindeerFood.docx"
+  | summarize by timestamp
+
+Answer: 2023-12-02T10:12:42Z
+
+
+==========
+What file is dropped to Alabaster's machine shortly after he downloads the malicious file?
+
+  FileCreationEvents
+  | where hostname == "Y1US-DESKTOP"
+
+Find the row with timestamp closest but after the one previously found. That downloads the invoice. The row right after that drops the additional file.
+Answer: giftwrap.exe
+
+
+==========
+Continue Onto KQLKrakenHuntCase4.txt

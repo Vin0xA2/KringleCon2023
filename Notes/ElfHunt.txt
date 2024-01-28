@@ -1,0 +1,26 @@
+In-game terminal (on Pixel Island: Rainraster Cliffs, go right from the dock to find a ladder, this is at the top of the ladder)
+Objective: Get 75 points in the game.
+Hint: https://portswigger.net/web-security/jwt
+
+
+The game is a point and click challenge with the targets moving very fast. (Right Click > Inspect > Application (tab) > Cookies > https://elfhunt.org) to find ElfHunt_JWT has the JWT values. It doesn't have a signature part so we alter it however we want. Put that second piece into CyberChef and base64 decode it to be the speed.
+
+  {"speed":-500}
+
+
+Change the value to a smaller negative number:
+
+  {"speed":-100}
+
+
+Base64 encode it but leave out the equal sign (=):
+
+  eyJzcGVlZCI6LTEwMH0
+
+
+Update ElfHunt_JWT:
+
+  eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzcGVlZCI6LTEwMH0.
+
+
+Close and restarting the game should have the elves move at a slower speed. Point and click. Get 75 points to win the game.

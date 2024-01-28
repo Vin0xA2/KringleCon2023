@@ -1,0 +1,80 @@
+In-game terminal (on Island of Misfit Toys: Scaredy Kite Heights, follow the path northeast of the dock to about the middle of the island)
+Objective: Determine the hash type in hash.txt and do a wordlist password cracking with hashcat.
+
+
+(Initial message at startup)
+In a realm of bytes and digital cheer,  
+The festive season brings a challenge near.  
+Santa's code has twists that may enthrall,  
+It's up to you to decode them all.
+
+Hidden deep in the snow is a kerberos token,  
+Its type and form, in whispers, spoken.  
+From reindeers' leaps to the elfish toast,  
+Might the secret be in an ASREP roast?
+
+`hashcat`, your reindeer, so spry and true,  
+Will leap through hashes, bringing answers to you.  
+But heed this advice to temper your pace,  
+`-w 1 -u 1 --kernel-accel 1 --kernel-loops 1`, just in case.
+
+For within this quest, speed isn't the key,  
+Patience and thought will set the answers free.  
+So include these flags, let your command be slow,  
+And watch as the right solutions begin to show.
+
+For hints on the hash, when you feel quite adrift,  
+This festive link, your spirits, will lift:  
+https://hashcat.net/wiki/doku.php?id=example_hashes
+
+And when in doubt of `hashcat`'s might,  
+The CLI docs will guide you right:  
+https://hashcat.net/wiki/doku.php?id=hashcat
+
+Once you've cracked it, with joy and glee so raw,  
+Run /bin/runtoanswer, without a flaw.  
+Submit the password for Alabaster Snowball,  
+Only then can you claim the prize, the best of all.
+
+So light up your terminal, with commands so grand,  
+Crack the code, with `hashcat` in hand!  
+Merry Cracking to each, by the pixelated moon's light,  
+May your hashes be merry, and your codes so right!
+
+* Determine the hash type in hash.txt and perform a wordlist cracking attempt to find which password is correct and submit it to /bin/runtoanswer .*
+
+
+(Read hash.txt)
+~$ cat hash.txt 
+  $krb5asrep$23$alabaster_snowball@XMAS.LOCAL:22865a2bceea...
+
+
+(Google searching $krb5asrep shows it's AS-REP. Find the associated -m value.)
+~$ hashcat -h | grep AS\-REP
+  18200 | Kerberos 5 AS-REP etype 23 | Network Protocols
+
+
+(See what the wordlist is named.)
+~$ ls -al
+  total 40
+  drwxr-xr-x 1 elf  elf  4096 Nov 27 17:07 .
+  drwxr-xr-x 1 root root 4096 Nov 20 18:07 ..
+  -rw-r--r-- 1 elf  elf   220 Feb 25  2020 .bash_logout
+  -rw-r--r-- 1 elf  elf  3771 Feb 25  2020 .bashrc
+  -rw-r--r-- 1 elf  elf   807 Feb 25  2020 .profile
+  -rw-r--r-- 1 elf  elf  1567 Nov 27 17:07 HELP
+  -rw-r--r-- 1 elf  elf   541 Nov  9 21:29 hash.txt
+  -rw-r--r-- 1 root root 2775 Nov  9 21:29 password_list.txt
+
+
+(Run hashcat against the hash file. Also limit computing resources.)
+~$ hashcat -a 0 -m 18200 -w 1 -u 1 --kernel-accel 1 --kernel-loops 1 --force hash.txt password_list.txt
+  $krb5asrep$23$alabaster...dd1966:IluvC4ndyC4nes!
+
+
+(Submit the answer.)
+~$ /bin/runtoanswer IluvC4ndyC4nes!
+Your answer: IluvC4ndyC4nes!
+
+Checking....
+Your answer is correct!

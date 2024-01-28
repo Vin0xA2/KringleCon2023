@@ -1,0 +1,41 @@
+Start with KQLKrakenHuntOnboarding.txt if you haven't.
+
+
+"Case 2" message:
+
+Nicely done! You found evidence of the spear phishing email targeting someone in our organization. Now, we need to learn more about who the victim is!
+
+If the victim is someone important, our organization could be doomed! Hurry up, let's find out more about who was impacted!
+
+
+==========
+What is the role of our victim in the organization?
+
+  Employees
+  | where email_addr == "alabaster_snowball@santaworkshopgeeseislands.org"
+  | summarize by role
+
+Answer: Head Elf
+
+
+==========
+What is the hostname of the victim's machine?
+
+  Employees
+  | where email_addr == "alabaster_snowball@santaworkshopgeeseislands.org"
+  | summarize by hostname
+
+Answer: Y1US-DESKTOP
+
+==========
+What is the source IP linked to the victim?
+
+  Employees
+  | where email_addr == "alabaster_snowball@santaworkshopgeeseislands.org"
+  | summarize by ip_addr
+
+Answer: 10.10.0.4
+
+
+==========
+Continue Onto KQLKrakenHuntCase3.txt

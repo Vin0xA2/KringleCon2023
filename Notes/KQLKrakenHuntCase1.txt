@@ -1,0 +1,57 @@
+Start with KQLKrakenHuntOnboarding.txt if you haven't.
+
+
+"Case 1" message:
+
+An urgent alert has just come in, 'A user clicked through to a potentially malicious URL involving one user.' This message hints at a possible security incident, leaving us with critical questions about the user's intentions, the nature of the threat, and the potential risks to Santa's operations. Your mission is to lead our security operations team, investigate the incident, uncover the motives behind email, assess the potential threats, and safeguard the operations from the looming cyber threat.
+
+The clock is ticking, and the stakes are high - are you up for this exhilarating challenge? Your skills will be put to the test, and the future of Geese Island's digital security hangs in the balance. Good luck!
+
+The alert says the user clicked the malicious link 'http://madelvesnorthpole.org/published/search/MonthlyInvoiceForReindeerFood.docx'
+
+
+==========
+What is the email address of the employee who received this phishing email?
+
+  OutboundNetworkEvents
+  | where url has "madelvesnorthpole.org/published/search/MonthlyInvoiceForReindeerFood.docx"
+  | summarize by src_ip
+
+src_ip: "10.10.0.4"
+
+
+  Employees
+  | where ip_addr == "10.10.0.4"
+  | summarize by email_addr
+
+Answer: alabaster_snowball@santaworkshopgeeseislands.org
+
+
+==========
+What is the email address that was used to send this spear phishing email?
+
+  OutboundNetworkEvents
+  | where url has "madelvesnorthpole.org/published/search/MonthlyInvoiceForReindeerFood.docx"
+  | summarize by timestamp
+
+timestamp: 2023-12-02T10:12:42Z
+
+
+  Email
+  | where recipient == "alabaster_snowball@santaworkshopgeeseislands.org"
+  | summarize by timestamp,sender, subject
+
+Find the email with subject about an invoice and received before the link was clicked.
+Answer: cwombley@gmail.com
+
+
+==========
+What was the subject line used in the spear phishing email?
+
+Answer: [EXTERNAL] Invoice foir reindeer food past due
+
+
+==========
+Actually the link, recipient, sender, and subject are all in just the Email table. It queries could have been simpler. Oh well.
+
+Continue Onto KQLKrakenHuntCase2.txt

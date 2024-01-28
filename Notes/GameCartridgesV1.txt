@@ -1,0 +1,23 @@
+Elf the Dwarf’s, Gloriously, Unfinished, Adventure! - Vol1 (on Island of Misfit Toys: Tarnished Trove, northwest part of the island has a hat in a pool of water, walk over it to pick it up)
+Objective: Access the game from the items menu and beat it.
+Hints:
+  1) Giving things a little push never hurts.
+  2) Out of sight but not out of ear-shot
+  3) You think you fixed the QR code? Did you scan it and see where it leads?
+
+
+The game looks like a gameboy. Can also use WASD to move the character. After the initial intro conversation, move the character out of the cave. Go all the way to the left, circle down around, back to the right, and down to the next area. There is a dog Kody next to the door to give instructions. The maze to the south is a big QR code. Press B to send a music note to a black square block to make it flash and sing. A dotted square will appear near it to show the correct position. Once the music stops, push the black square block into the correct position. There is a total of 7 misaligned blocks.
+
+
+1) First block directly south of Kody.
+2) Let's say the lower right most corner being column 1, row 1. Sing to column 9, row 6 and push it into place.
+3) Sing to column 5, row 3 and push it into place.
+4) Sing to column 11, row 4 and push it into place.
+5 and 6) Sing to column 12, row 6 and column 13, row 5. Go back to column 1, row 1 and approach the blocks from the north. Push both blocks down 1. Push the upper block to the right into place. Push the other block back up 1 and then to the right into place.
+7) The upper left corner of the QR code is a 3x3 block inside a 5x5 square. Using the lower right corner of the 5x5 square as reference, sing to the first block directly south of it. Push the block out of the QR code, then up and around, and finally down the right side of the QR code. The upper right corner of the QR code also has the 3x3 block inside a 5x5 square. Push the misaligned block to the lower right corner of that 5x5 square. Sing to the misaligned block to see the correct position.
+
+
+The game then display a QR code (which is different than the big QR code we fixed). See GameCartridgesV1QR.jpg for the screenshot. Use (https://online-barcode-reader.inliteresearch.com/) to read the QR code in the JPG file to get http://8bitelf.com. Access it in a web browser to get a page displaying flag:santaconfusedgivingplanetsqrcode.
+
+
+Answer: santaconfusedgivingplanetsqrcode

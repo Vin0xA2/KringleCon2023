@@ -1,0 +1,22 @@
+In-game Terminal (Snowball Hero in the middle of Christmas Island: Frosty's Beach)
+Objective: Team up with another player and show Morcel how to win against Santa!
+
+
+(Load up the terminal get mode select: VS SANTA or VS PLAYERS)
+(Options to start the game:)
+  1. RANDOM MATCH MAKING
+  2. CREATE PRIVATE ROOM
+  3. JOIN PRIVATE ROOM
+
+
+(Choose option 1 to quick start a game versus Santa.)
+(See SnowballFightInstructions.jpg for directions.)
+  -WASD or arrow keys both moves your character.
+  -Left Click to throw snowball.
+  -You have either red or blue snowballs.
+  -Aim for the cooresponding elves.
+  -Defeat Santa by hitting him with alternating colored snowballs with your partner.
+
+
+(See SnowballFightVictory.jpg for victory screen.)
+

@@ -1,0 +1,20 @@
+In-game terminal (on Film Noir Island: The Blacklight District, in the northeastern corner of the island.)
+Objective: Go through email in the Phishing folder and mark them as safe if appropriate.
+Hint: https://www.cloudflare.com/learning/email-security/dmarc-dkim-spf/
+
+
+Initial message at startup, see: PhishDetection.jpg
+
+Click on the Phising folder and open an email. In the Email Headers section, make sur ethe Return-Path and Received has a domain of geeseislands.com. DKIM-Signature should have d=geeseislands.com and DMARC = pass. If all of the above are true, then mark it or leave it as safe. Otherwise mark it or leave it as phishing. Click NEXT to go to the next email. Once every email is marked correctly, then you will get the success message below.
+
+
+Success!
+
+Congratulations, Ace Detective! You've successfully navigated the treacherous waters of deception and emerged victorious. Your sharp wits and keen eye for detail have cracked the case wide open, proving that even the most cunning phishing attempts are no match for your discerning mind.
+
+In a world where shadows often obscure the truth, you shone a bright light on duplicity. Your unwavering commitment to truth and justice in the digital realm has kept our virtual streets safe. Thanks to your efforts, the Phishing Detection Agency stands strong, a bulwark against the tide of digital deceit.
+
+Remember, the battle against phishing is ongoing, but with sleuths like you on the case, the internet remains a safer place. You're not just a hero; you're a guardian of the digital frontier. So here's to you, the quintessential cyber sleuth, a beacon of hope in these pixelated alleyways of misinformation.
+
+Your achievement is not just a personal victory; it's a triumph for all of us in the agency.
+

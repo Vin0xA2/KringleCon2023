@@ -1,0 +1,9 @@
+In-game terminal (on Film Noir Island: Chiaroscuro City, at the middle of the island.)
+Objective: Beat Shifty McShuffles in a card game.
+Hints
+  https://www.tenable.com/blog/python-nan-injection
+  Try to outsmart Shifty by sending him an error he may not understand.
+  (talk from last year) https://www.youtube.com/watch?v=lghzDTQBLNM
+
+
+See Naan.jpg for initial message at startup and instructions. You have 5 cards and can type a number from 0 to 9. Each card has to be unique. The vulnerability is that you can type nan as a card as well. Playing a hand of 0, 1, nan, 8, 9 will call nan to be the max and the min, thus scoring you 2 points. Repeat 4 more times to get 10 points and complete the challenge.

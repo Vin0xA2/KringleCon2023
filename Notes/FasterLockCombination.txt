@@ -1,0 +1,78 @@
+In-game terminal (on Steampunk Island: Brass Bowy Port, near the west end of the island, next to Bow Ninecandle)
+Objective: Unlock the padlock (rotate dial clockwise to the first digit, then counter clockwise to the second digit, and finally clockwise again to the third digit.)
+Hint: https://www.youtube.com/watch?v=27rE5ZvWLU0
+
+
+(Initial message at statup see: FasterLockCombination.jpg)
+
+
+Find sticky number, pull the latch just shy of all the way and rotate dial clockwise until it consistantly gets a little stuck on a number. Video
+
+
+Two guess numbers are between 0 and 11. Apply full tension on the latch and see if it will easily glide between two different half numbers that are next to each other. For example, if it glides between 39.5 and 0.5, then 0 is a guess number. If it glides between 4 and 5, then there is no guess numbers there.
+
+
+Example from the video: sticky number = 0, guess numbers = 0 and 3.
+First digit: 8
+  Sticky numbers + 5 = 8
+Third digit: 0
+  First digit / 4 = 2 with remainder of 0
+  Guess numbers + multiples of 10 = 0, 10, 20, 30 and 3, 13, 23, 33.
+  0 and 20 when divided by 4 also get a remainder of 0 like above.
+  Put dial on 0, pull latch, spin dial = loose or tight.
+  Repeat with 20. The one that's loose is the last digit.
+Second digit: 6, 10, 14, 18, 22, 26, 30, or 34
+  Make two rows of five numbers. First take the remainder from above and add 2. Add 8 for four times to make five numbers in total. Minus 40 if a number goes over 39. (2, 10, 18, 26, 34)
+  Add 4 to get number in the first row and to make the second row. (6, 14, 22, 30, 38)
+  Alternative version is to take the remainder from above and add 2 to get the first guess. Add 4 to the number nine times to get a total of ten guesses. Still minus 40 if a number goes over 39.
+  Second digit cannot be 2 away from third digit, so no 2 nor 38.
+
+
+We know the first and the third digits. And there are eight possible numbers for the second digit. Now just trial and error to unlock the padlock. Spin dial clockwise multiple times to reset and go to 8. Spin dial counterclockwise one full revolution and stop at 18. Spin dial clockwise to 0. Pull latch and unlock.
+
+
+(For the challenge, pull latch a little and hold the right arrow. The dial slows down on 23.)
+Sticky number = 23
+
+
+(Put full tension on latch and the dial will glide between 1.5 and 2.5.)
+Guess number = 2
+
+
+(Repeat on a different number to have it glide between 6.5 and 7.5.)
+Guess number = 7
+
+
+(First digit = sticky number plus 5.)
+First digit = 28
+
+
+(Remainder of first digit divided by 4 is 0.)
+(Add multiples of 10 to the guess numbers.)
+2, 12, 22, 32
+7, 17, 27, 37
+
+
+(Find the numbers that will get a remainder of 0 when divided by 4.)
+12 and 32
+
+
+(Dial spins loosely when it is on 12 and with full tension on the latch.)
+Third digit = 12
+
+
+(Add 2 to the remainder from above and then add 4 to it nine times to get 10 guess. Minus 40 if a number goes over 39.)
+2, 6, 10, 14, 18, 22, 26, 30, 34, 38
+
+
+(10 and 14 are within 2 of the third digit so those are no good.)
+First digit: 28
+Second digit: 2, 6, 18, 22, 26, 30, 34, 38
+Third digit: 12
+
+
+(Trial and error until the padlock unlocks.)
+28, 34, 12
+
+
+Success!!
