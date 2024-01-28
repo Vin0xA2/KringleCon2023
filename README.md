@@ -8,27 +8,29 @@ Below are my notes and solutions for the 2023 SANS Holiday Hack Challenge (Kring
 
 ## Snowball Fight
 [Snowball Fight](Notes/SnowballFight.txt)
+([Instructions](ReferenceMaterials/SnowballFightInstructions.jpg) | [Victory!](ReferenceMaterials/SnowballFightVictory.jpg))
 
 ## Linux 101
 [Linux 101](Notes/Linux101.txt)
 
 ## Reportinator
 [Reportinator](Notes/Reportinator.txt)
+([The Report](ReferenceMaterials/Reportinator.docx) | [JS Code](ReferenceMaterials/ReportinatorJS.txt) | [Success Message](ReferenceMaterials/ReportinatorSuccess.docx))
 
 ## Azure 101
 [Azure 101](Notes/Azure101.txt)
 
 ## Luggage Lock
-[Luggage Lock](Notes/LuggageLock.txt)
+[Luggage Lock](Notes/LuggageLock.txt) ([Initial Screen](ReferenceMaterials/LuggageLock.jpg))
 
 ## Linux Privilege Escalation
 [Linux PrivEsc](Notes/LinuxPrivEsc.txt)
 
 ## Faster Lock Combination
-[Faster Lock Combination](Notes/FasterLockCombination.txt)
+[Faster Lock Combination](Notes/FasterLockCombination.txt) ([Initial Screen](ReferenceMaterials/FasterLockCombination.jpg))
 
 ## Game Cartridges V1
-[Game Cartridges V1](Notes/GameCartridgesV1.txt)
+[Game Cartridges V1](Notes/GameCartridgesV1.txt) ([The QR Code](ReferenceMaterials/GameCartridgesV1QR.jpg))
 
 ## Game Cartridges V2
 (In progress)
@@ -37,7 +39,7 @@ Below are my notes and solutions for the 2023 SANS Holiday Hack Challenge (Kring
 (In progress)
 
 ## Na-an
-[Na-an](Notes/Naan.txt)
+[Na-an](Notes/Naan.txt) ([Instructions](ReferenceMaterials/Naan.jpg))
 
 ## KQL Kraken Hunt
 [Onboarding](Notes/KQLKrakenHuntOnboarding.txt)
@@ -55,7 +57,7 @@ Below are my notes and solutions for the 2023 SANS Holiday Hack Challenge (Kring
 [Case 6](Notes/KQLKrakenHuntCase6.txt)
 
 ## Phish Detection Agency
-[Phish Detection Agency](Notes/PhishDetectionAgency.txt)
+[Phish Detection Agency](Notes/PhishDetectionAgency.txt) ([Initial Screen](ReferenceMaterials/PhishDetection.jpg))
 
 ## Hashcat
 [Hashcat](Notes/Hashcat.txt)
@@ -64,7 +66,7 @@ Below are my notes and solutions for the 2023 SANS Holiday Hack Challenge (Kring
 [Elf Hunt](Notes/ElfHunt.txt)
 
 ## Certificate SSHenanigans
-[Certificate SSHenanigans](Notes/CertificateSSHenanigans.txt)
+[Certificate SSHenanigans](Notes/CertificateSSHenanigans.txt) ([Demo Notes](ReferenceMaterials/SSHenanigansDemoNotes.txt))
 
 ## Captain Comms
 (In progress)
